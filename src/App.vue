@@ -1,83 +1,65 @@
 <script setup>
-const skills = [
-  { icon: '⚡', title: 'Frontend', desc: 'Vue 3, React, TypeScript, Tailwind CSS — building fast, accessible UIs.' },
-  { icon: '🛠', title: 'Backend', desc: 'Node.js, Python, REST & GraphQL APIs, PostgreSQL, Redis.' },
-  { icon: '☁️', title: 'Cloud & DevOps', desc: 'AWS, Docker, CI/CD pipelines, GitHub Actions, Terraform.' },
-  { icon: '🎨', title: 'Design Systems', desc: 'Component libraries, design tokens, Figma to code workflows.' },
-  { icon: '📱', title: 'Mobile', desc: 'React Native cross-platform apps with native-feel performance.' },
-  { icon: '🔒', title: 'Security', desc: 'OWASP best practices, auth flows, dependency auditing.' },
-]
+import { ref, onMounted } from 'vue'
 
-const projects = [
-  {
-    emoji: '🚀',
-    bg: 'linear-gradient(135deg,#1a1a2e,#16213e)',
-    title: 'Launchpad',
-    desc: 'A SaaS boilerplate with auth, billing, and a feature-flag system built on Next.js + Stripe.',
-    tags: ['Next.js', 'TypeScript', 'Stripe'],
-    demo: '#',
-    repo: '#',
-  },
-  {
-    emoji: '🤖',
-    bg: 'linear-gradient(135deg,#0d1117,#161b22)',
-    title: 'AI Chat CLI',
-    desc: 'Terminal-based chat client for Claude and GPT models with streaming, history, and plugin support.',
-    tags: ['Python', 'Rich', 'Claude API'],
-    demo: '#',
-    repo: '#',
-  },
-  {
-    emoji: '📊',
-    bg: 'linear-gradient(135deg,#0f2027,#203a43)',
-    title: 'Dataflow',
-    desc: 'Real-time analytics dashboard with WebSocket feeds, D3 charts, and role-based access control.',
-    tags: ['Vue 3', 'D3.js', 'WebSockets'],
-    demo: '#',
-    repo: '#',
-  },
+const isDark = ref(true)
+
+onMounted(() => {
+  isDark.value = document.documentElement.getAttribute('data-theme') !== 'light'
+})
+
+function toggleTheme() {
+  isDark.value = !isDark.value
+  const theme = isDark.value ? 'dark' : 'light'
+  document.documentElement.setAttribute('data-theme', theme)
+  localStorage.setItem('theme', theme)
+}
+
+const skills = [
+  { title: 'Frontend', desc: 'Vue 3, React, TypeScript, Tailwind CSS.' },
+  { title: 'Backend', desc: 'Node.js, Python, REST & GraphQL APIs, PostgreSQL, Redis.' },
+  { title: 'Cloud & DevOps', desc: 'AWS, Docker, CI/CD, GitHub Actions, Terraform.' },
+  { title: 'Design Systems', desc: 'Component libraries, design tokens, Figma to code.' },
+  { title: 'Mobile', desc: 'React Native cross-platform apps.' },
+  { title: 'Security', desc: 'OWASP best practices, auth flows, dependency auditing.' },
 ]
 </script>
 
 <template>
   <div id="app">
-    <!-- Nav -->
     <nav>
       <span class="nav-logo">pnamng.dev</span>
-      <ul class="nav-links">
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
+      <div class="nav-right">
+        <ul class="nav-links">
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="theme-btn" @click="toggleTheme" :aria-label="isDark ? 'Light mode' : 'Dark mode'">
+          <svg v-if="isDark" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
     </nav>
 
-    <!-- Hero -->
     <section class="hero">
-      <div class="hero-badge">
+      <div class="badge">
         <span class="dot"></span>
         Open to opportunities
       </div>
-      <h1>Hi, I'm <span>Nam</span> —<br>I build things for the web.</h1>
-      <p>
-        Full-stack developer focused on crafting clean, performant products that users love.
-        6+ years turning ideas into production software.
-      </p>
-      <div class="hero-cta">
-        <a href="#projects" class="btn btn-primary">View my work ↓</a>
-        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      <h1>Building things<br>for the web.</h1>
+      <p>Full-stack developer focused on clean, performant products.<br>6+ years turning ideas into production software.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary">Get in touch</a>
+        <a href="#skills" class="btn btn-ghost">See what I do</a>
       </div>
     </section>
 
     <hr class="divider" />
 
-    <!-- Skills -->
     <section id="skills">
-      <p class="section-label">What I do</p>
-      <h2 class="section-title">Skills & Expertise</h2>
-      <p class="section-sub">A toolkit refined across startups, agencies, and open source.</p>
+      <p class="label">Expertise</p>
+      <h2 class="section-title">Skills</h2>
       <div class="skills-grid">
         <div v-for="s in skills" :key="s.title" class="skill-card">
-          <div class="skill-icon">{{ s.icon }}</div>
           <h3>{{ s.title }}</h3>
           <p>{{ s.desc }}</p>
         </div>
@@ -86,54 +68,28 @@ const projects = [
 
     <hr class="divider" />
 
-    <!-- Projects -->
-    <section id="projects">
-      <p class="section-label">Selected work</p>
-      <h2 class="section-title">Projects</h2>
-      <p class="section-sub">A few things I've built recently. More on GitHub.</p>
-      <div class="projects-grid">
-        <div v-for="p in projects" :key="p.title" class="project-card">
-          <div class="project-thumb" :style="{ background: p.bg }">{{ p.emoji }}</div>
-          <div class="project-body">
-            <div class="project-tags">
-              <span v-for="t in p.tags" :key="t" class="tag">{{ t }}</span>
-            </div>
-            <h3>{{ p.title }}</h3>
-            <p>{{ p.desc }}</p>
-            <div class="project-links">
-              <a :href="p.demo">↗ Live demo</a>
-              <a :href="p.repo">⌥ Source</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <hr class="divider" />
-
-    <!-- Contact -->
     <section id="contact">
-      <div class="contact-card">
-        <h2>Let's work together</h2>
-        <p>I'm always happy to chat about interesting projects, freelance work, or full-time roles.</p>
-        <a href="mailto:pnam2311@gmail.com" class="btn btn-primary">pnam2311@gmail.com</a>
-        <div class="social-links">
-          <a href="https://github.com/pnamng" class="social-link" target="_blank" rel="noopener">
-            ⌥ GitHub
-          </a>
-          <a href="https://linkedin.com" class="social-link" target="_blank" rel="noopener">
-            in LinkedIn
-          </a>
-          <a href="https://twitter.com" class="social-link" target="_blank" rel="noopener">
-            𝕏 Twitter
-          </a>
-        </div>
+      <p class="label">Get in touch</p>
+      <h2 class="section-title">Contact</h2>
+      <p class="section-sub">Happy to chat about projects, freelance, or full-time roles.</p>
+      <div class="contact-list">
+        <a href="mailto:pnam2311@gmail.com" class="contact-row">
+          <span class="contact-type">Email</span>
+          <span class="contact-val">pnam2311@gmail.com <span class="arrow">↗</span></span>
+        </a>
+        <a href="https://github.com/pnamng" class="contact-row" target="_blank" rel="noopener">
+          <span class="contact-type">GitHub</span>
+          <span class="contact-val">pnamng <span class="arrow">↗</span></span>
+        </a>
+        <a href="https://linkedin.com" class="contact-row" target="_blank" rel="noopener">
+          <span class="contact-type">LinkedIn</span>
+          <span class="contact-val">LinkedIn <span class="arrow">↗</span></span>
+        </a>
       </div>
     </section>
 
-    <!-- Footer -->
     <footer>
-      Built with Vue 3 + Vite · © {{ new Date().getFullYear() }} Nam Pham
+      Built with Vue 3 + Vite · {{ new Date().getFullYear() }}
     </footer>
   </div>
 </template>
